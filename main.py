@@ -1,6 +1,4 @@
 import time
-import kindle_graphics
-
 from framebuffer import framebuffer
 
 def main():
