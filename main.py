@@ -8,6 +8,4 @@ def main():
     fb = Framebuffer(constants.framebuffer_number)
     ui.spectral_plot.show_band(fb)
 
-    TestFrameBuffer()
-
 main()
