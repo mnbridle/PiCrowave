@@ -5,7 +5,7 @@ def show_channel(fb, channel_number: int = 1):
 
 def show_band(fb):
     # Initialise image in framebuffer
-    image = Image.new("RGBA", fb.size)
+    image = Image.new("RGBA", fb.size, (128, 128, 128, 0))
     draw = ImageDraw.Draw(image)
 
     # Draw grid - every 5MHz
@@ -13,13 +13,11 @@ def show_band(fb):
     # RSSI from -96 to -26 = 70dBm
     # Every 10dBm -> 7 lines -> 240/7 = 30
 
-    draw.rectangle(((0, 0), fb.size), fill="black")
-
     for x in range(0, 320, 18):
-        draw.line((x, 15), (x, 225), fill=(255,255,255))
+        draw.line((x, 15, x, 225), fill=(255, 255, 255, 0), width=10)
 
     for y in range(15, 240, 30):
-        draw.line((0, y), (320, y), fill=(255,255,255))
+        draw.line((0, y, 320, y), fill=(255, 255, 255, 0), width=10)
 
     # get a font
     fnt = ImageFont.truetype("Pillow/Tests/fonts/FreeMono.ttf", 12)
