@@ -23,6 +23,8 @@ def TestFrameBuffer():
     # draw multiline text
     draw.multiline_text((10, 10), "Hello\nWorld", font=fnt, fill=(0, 0, 0))
 
+    fb.show(image)
+
     # Plot something using matplotlib
 
     # # channel RSSI
