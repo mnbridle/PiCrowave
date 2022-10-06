@@ -9,7 +9,7 @@ import io
 
 
 def TestFrameBuffer():
-    fb = framebuffer.Framebuffer(constants.framebuffer_number)
+    fb = Framebuffer(constants.framebuffer_number)
 
     # Initialise image in framebuffer
     image = Image.new("RGBA", fb.size)
