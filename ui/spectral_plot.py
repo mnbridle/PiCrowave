@@ -44,8 +44,10 @@ def show_band(fb, rf_data):
     draw.text((50, 0), "SPECTRAL ANALYSIS", font=hdg_fnt, fill="red")
 
     # Convert frequency to x pixel
-    rf_power = -60
-    for frequency in range(2400, 2540, 5):
+    for data_point in rf_data:
+        frequency = data_point[0] / 1000
+        rf_power = data_point[1]
+
         x = int(((frequency - 2400) * 2) + 40)
         y = int((-((rf_power + 20) * 2)) + 20)
         draw.ellipse([(x-1, y-1), (x+1, y+1)], fill="yellow")
