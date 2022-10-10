@@ -29,7 +29,7 @@ def show_band(fb):
 
     for x in range(40, 320, 20):
         draw.line((x, 20, x, 220), fill="green")
-        if (y-20 % 40 == 0):
+        if (x-20 % 40 == 0):
             label = f"{2380 + (x/2)}"
             draw.text((x, 220), label.rjust(6), font=small_fnt, fill="green")
 
