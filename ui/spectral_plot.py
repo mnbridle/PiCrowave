@@ -34,7 +34,8 @@ def show_band(fb):
 
     for y in range(20, 220, 20):
         draw.line((40, y, 320, y), fill="white")
-        label = f"{-30 - (y-20)/2}"
-        draw.text((0, y+15), label.rjust(6), font=small_fnt, fill="green")
+        if (y-20 % 40 == 0):
+            label = f"{-30 - (y-20)/2}"
+            draw.text((0, y+15), label.rjust(6), font=small_fnt, fill="green")
 
     fb.show(image)
