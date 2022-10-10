@@ -5,7 +5,7 @@ def show_channel(fb, channel_number: int = 1):
 
 def show_band(fb):
     # Initialise image in framebuffer
-    image = Image.new("RGBA", fb.size, (128, 128, 128, 0))
+    image = Image.new("RGBA", fb.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(image)
 
     # Draw grid
