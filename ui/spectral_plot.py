@@ -24,12 +24,13 @@ def show_band(fb):
     shape = [(0, 0), (320, 240)]
     draw.rectangle(shape, fill="#000000", outline="black")
 
-    shape = [(20, 20), (300, 220)]
+    shape = [(40, 20), (320, 220)]
     draw.rectangle(shape, fill="#101010", outline="white")
 
     for x in range(40, 320, 20):
         draw.line((x, 20, x, 220), fill="green")
-        draw.text((x, 220), f"{2380 + (x/2)}", font=small_fnt, fill="green")
+        label = f"{2380 + (x/2)}"
+        draw.text((x, 220), label.rjust(6), font=small_fnt, fill="green")
 
     for y in range(20, 220, 20):
         draw.line((40, y, 320, y), fill="white")
