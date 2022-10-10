@@ -21,6 +21,9 @@ def show_band(fb):
     # Bottom left corner: (20, 220)
     # Bottom right corner: (300, 220)
 
+    shape = [(0, 0), (320, 240)]
+    draw.rectangle(shape, fill="#000000", outline="white")
+
     shape = [(20, 20), (300, 220)]
     draw.rectangle(shape, fill="#101010", outline="white")
 
