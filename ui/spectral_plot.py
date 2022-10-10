@@ -48,6 +48,6 @@ def show_band(fb, rf_data):
     for frequency in range(2400, 2540, 5):
         x = int(((frequency - 2400) * 2) + 40)
         y = int((-((rf_power + 20) * 2)) + 20)
-        draw.text((x, y), "X", font=small_fnt, fill="yellow")
+        draw.ellipse([(x-5, y-5), (x+5, y+5)], fill="yellow")
 
     fb.show(image)
