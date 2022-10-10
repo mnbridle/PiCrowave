@@ -17,28 +17,33 @@ def show_band(fb, rf_data):
     hdg_fnt = ImageFont.truetype("Pillow/Tests/fonts/FreeMono.ttf", 16)
 
     # Boundaries: (come out 20px each side)
-    # Top left corner: (20, 20)
-    # Top right corner: (300, 20)
-    # Bottom left corner: (20, 220)
-    # Bottom right corner: (300, 220)
+    # Top left corner: (30, 20)
+    # Top right corner: (310, 20)
+    # Bottom left corner: (30, 220)
+    # Bottom right corner: (310, 220)
     # Frequency: 2400 - 2540MHz
     # RF power: -20 to -120dBm
+
+    minX = 30
+    maxX = 310
+    minY = 20
+    maxY = 220
 
     shape = [(0, 0), (320, 240)]
     draw.rectangle(shape, fill="#000000", outline="black")
 
-    shape = [(40, 20), (319, 220)]
+    shape = [(minX, minY), (maxX, maxY)]
     draw.rectangle(shape, fill="#101010", outline="white")
 
-    for x in range(40, 320, 20):
-        draw.line((x, 20, x, 220), fill="green")
+    for x in range(minX, maxX, 20):
+        draw.line((x, minY, x, maxY), fill="green")
         if (x % 40 == 0):
             label = f"{int(2380 + (x/2))}"
-            draw.text((x-25, 220), label.rjust(6), font=small_fnt, fill="green")
+            draw.text((x-25, maxY), label.rjust(6), font=small_fnt, fill="green")
 
-    for y in range(20, 220, 20):
-        draw.line((40, y, 320, y), fill="white")
-        label = f"{-30 - (y-20)/2}"
+    for y in range(minY, maxY, 20):
+        draw.line((minX, y, maxX, y), fill="white")
+        label = f"{int(-30 - (y-20)/2})"
         draw.text((0, y+15), label.rjust(6), font=small_fnt, fill="green")
 
     draw.text((50, 0), "SPECTRAL ANALYSIS", font=hdg_fnt, fill="red")
@@ -49,8 +54,8 @@ def show_band(fb, rf_data):
         frequency = data_point[0] / 1000
         rf_power = data_point[1]
 
-        x = int(((frequency - 2400) * 2) + 40)
-        y = int((-((rf_power + 20) * 2)) + 20)
+        x = int(((frequency - 2400) * 2) + minX)
+        y = int((-((rf_power + 20) * 2)) + minY)
 
         if old_data is None:
             old_data = (x, y)
