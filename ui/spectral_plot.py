@@ -44,7 +44,7 @@ def show_band(fb, rf_data):
     for y in range(minY, maxY, 20):
         draw.line((minX, y, maxX, y), fill="white")
         label = f"{int(-30 - (y-20)/2)}"
-        draw.text((0, y+15), label.rjust(6), font=small_fnt, fill="green")
+        draw.text((0, y+15), label.rjust(4), font=small_fnt, fill="green")
 
     draw.text((50, 0), "SPECTRAL ANALYSIS", font=hdg_fnt, fill="red")
 
