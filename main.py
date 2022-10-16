@@ -1,21 +1,17 @@
-import time
-from framebuffer import framebuffer
+from framebuffer.framebuffer import Framebuffer
+from framebuffer import constants
+
+from wifi import test_data
+
+import ui.spectral_plot
+
 
 def main():
-    lcd_screen = framebuffer.FB_GFXInterface(320, 240)
-    
-    lcd_screen.init()
-    lcd_screen.write_screen()
-    
-    for idx, circle_radius in enumerate(range(8, 128, 8)):
-        lcd_screen.circle(160, 120, circle_radius, fg_shade=idx*2)
+    fb = Framebuffer(constants.framebuffer_number)
 
-    for y in range(16, 240, 16):
-        lcd_screen.horizontal_line(y=y, fg_shade=15)
-
-    for x in range(16, 320, 16):
-        lcd_screen.vertical_line(x=x, fg_shade=15)
-
-    lcd_screen.write_screen()
+    # Get test data
+    while True:
+        rf_data = test_data.full_spectrum_fft(min_freq=2400000, max_freq=2540000, freq_resolution=5000)
+        ui.spectral_plot.show_band(fb, rf_data)
 
 main()
