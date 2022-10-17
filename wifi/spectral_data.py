@@ -43,7 +43,8 @@ class SpectralData(object):
         while time.time() - start_time < 10:
             (ts, (tsf, freq, noise, rssi, pwr)) = self.work_queue.get(block=True)
             # print(ts, tsf, freq, noise, rssi, pwr)
-            print(np.array(pwr))
+            data = list(pwr.items())
+            print(np.array(data))
 
         # Tear down hardware
         self.scanner.stop()
