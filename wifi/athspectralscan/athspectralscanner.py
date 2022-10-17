@@ -46,9 +46,9 @@ class AthSpectralScanner(object):
                 if phy == self.phy:
                     self.driver = dirname.split(os.path.sep)[-1]
                     self.debugfs_dir = dirname
-                    with open(os.path.sep.join(dirname.split(os.path.sep)[:-1]) + os.path.sep + 'ht40allow_map') as f:
-                        self.ht40allow_map_raw = f.read()
-                    f.close()
+                    # with open(os.path.sep.join(dirname.split(os.path.sep)[:-1]) + os.path.sep + 'ht40allow_map') as f:
+                    #     self.ht40allow_map_raw = f.read()
+                    # f.close()
                     break
         if self.debugfs_dir is None:
             raise Exception("Unable to access 'spectral_scan_ctl' file for interface '%s'. "
@@ -59,13 +59,13 @@ class AthSpectralScanner(object):
         # hardware capabilities: channels to tune to
         self.channels = []
         self._get_supported_channels()
-        logger.debug("interface '%s' supports the channels: %s" % (self.interface, self.channels))
-        logger.debug("ht40allow map: %s" % self.ht40allow_map_raw.replace('\n', ","))
-        self.ht40allow_map = dict()
-        for line in self.ht40allow_map_raw.split('\n'):  # 2412 HT40  + \n2432 HT40 -+ \n2484 Disabled
-            freq_mode_allowmap = line.split()
-            if len(freq_mode_allowmap) == 3:
-                self.ht40allow_map[freq_mode_allowmap[0]] = freq_mode_allowmap[2]
+        # logger.debug("interface '%s' supports the channels: %s" % (self.interface, self.channels))
+        # logger.debug("ht40allow map: %s" % self.ht40allow_map_raw.replace('\n', ","))
+        # self.ht40allow_map = dict()
+        # for line in self.ht40allow_map_raw.split('\n'):  # 2412 HT40  + \n2432 HT40 -+ \n2484 Disabled
+        #     freq_mode_allowmap = line.split()
+        #     if len(freq_mode_allowmap) == 3:
+        #         self.ht40allow_map[freq_mode_allowmap[0]] = freq_mode_allowmap[2]
 
         # chanscan mode triggers on changed channels. Use Process to run "iw scan" to tune to all channels
         self.chanscan_process = None
@@ -190,20 +190,20 @@ class AthSpectralScanner(object):
     def set_HT_mode(self, ht_mode):
         if ht_mode == "HT20":
             self.current_ht_mode = ht_mode
-        elif "HT40" in ht_mode:
-            self._set_ht40_mode_for_freq(self.current_freq)
+        # elif "HT40" in ht_mode:
+        #     self._set_ht40_mode_for_freq(self.current_freq)
         else:
-            raise Exception("unknown value for HT mode: '%s'. valid: HT20, HT40" % count)
+            raise Exception("unknown value for HT mode: '%s'. valid: HT20" % count)
         self.set_channel(self.current_chan)  # set new HT mode
 
-    def _set_ht40_mode_for_freq(self, freq):
-        if not str(freq) in self.ht40allow_map.keys():
-            self.current_ht_mode = "HT20"
-            return
-        if "+" in self.ht40allow_map[str(freq)]:
-            self.current_ht_mode = "HT40+"
-        else:
-            self.current_ht_mode = "HT40-"
+    # def _set_ht40_mode_for_freq(self, freq):
+    #     if not str(freq) in self.ht40allow_map.keys():
+    #         self.current_ht_mode = "HT20"
+    #         return
+    #     if "+" in self.ht40allow_map[str(freq)]:
+    #         self.current_ht_mode = "HT40+"
+    #     else:
+    #         self.current_ht_mode = "HT40-"
 
     # Source of min/max values for parameters: ath9k/spectral-common.c
     def set_spectral_count(self, count):
@@ -279,8 +279,8 @@ class AthSpectralScanner(object):
             if chan == channel or freq == frequency:
                 self.current_freq = freq
                 self.current_chan = chan
-                if self.current_ht_mode != "HT20":
-                    self._set_ht40_mode_for_freq(freq)
+                # if self.current_ht_mode != "HT20":
+                #     self._set_ht40_mode_for_freq(freq)
                 logger.debug("set freq to %d in mode %s" % (freq, self.current_ht_mode))
                 os.system("sudo iw dev %s set freq %d %s" % (self.interface, freq, self.current_ht_mode))
                 if self.running:
