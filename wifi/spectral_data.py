@@ -1,4 +1,4 @@
-from athspectralscan import AthSpectralScanner, DataHub,  AthSpectralScanDecoder
+from .athspectralscan import AthSpectralScanner, DataHub,  AthSpectralScanDecoder
 import multiprocessing as mp
 import queue
 import logging
@@ -7,7 +7,7 @@ import sys
 import os
 
 def live_sample():
-    interface = "phy1"
+    interface = "wlan1"
 
     # Setup logger
     logger = logging.getLogger()
