@@ -15,6 +15,7 @@ def main():
     # Get test data
     while True:
         rf_data = test_data.full_spectrum_fft(min_freq=2400000, max_freq=2540000, freq_resolution=5000)
+        print(rf_data)
         ui.spectral_plot.show_band(fb, rf_data)
 
 main()
