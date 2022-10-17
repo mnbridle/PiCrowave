@@ -1,6 +1,7 @@
 from .athspectralscan import AthSpectralScanner, DataHub,  AthSpectralScanDecoder
 import wifi.constants
 import multiprocessing as mp
+import numpy as np
 import queue
 import logging
 import time
@@ -41,7 +42,8 @@ class SpectralData(object):
 
         while time.time() - start_time < 10:
             (ts, (tsf, freq, noise, rssi, pwr)) = self.work_queue.get(block=True)
-            print(ts, tsf, freq, noise, rssi, pwr)
+            # print(ts, tsf, freq, noise, rssi, pwr)
+            print(np.array(pwr))
 
         # Tear down hardware
         self.scanner.stop()
