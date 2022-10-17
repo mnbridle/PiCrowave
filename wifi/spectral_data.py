@@ -22,7 +22,7 @@ def live_sample():
     decoder = AthSpectralScanDecoder()
     decoder.set_number_of_processes(1)  # so we do not need to sort the results by TSF
     decoder.set_output_queue(work_queue)
-    decoder.disable_pwr_decoding(True)   # enable to extract "metadata": time (TSF), frequency, etc  (much faster!)
+    decoder.disable_pwr_decoding(False)
     decoder.start()
 
     # Setup scanner and data hub
