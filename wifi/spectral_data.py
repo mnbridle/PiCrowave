@@ -1,5 +1,5 @@
 from .athspectralscan import AthSpectralScanner, DataHub,  AthSpectralScanDecoder
-import .wifi.constants
+import wifi.constants
 import multiprocessing as mp
 import queue
 import logging
