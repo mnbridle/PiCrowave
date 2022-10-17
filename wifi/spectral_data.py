@@ -1,4 +1,5 @@
 from .athspectralscan import AthSpectralScanner, DataHub,  AthSpectralScanDecoder
+import .wifi.constants
 import multiprocessing as mp
 import queue
 import logging
@@ -6,47 +7,55 @@ import time
 import sys
 import os
 
-def live_sample():
-    interface = "wlan1"
+class SpectralData(object):
+    def __init__(self):
+        self._setup_logging()
 
-    # Setup logger
-    logger = logging.getLogger()
-    handler = logging.StreamHandler()
-    formatter = logging.Formatter(
-            '%(name)-12s %(levelname)-8s %(message)s')
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
-    logger.setLevel(logging.DEBUG)
-    # Setup a queue to store the result
-    work_queue = mp.Queue()
-    decoder = AthSpectralScanDecoder()
-    decoder.set_number_of_processes(1)  # so we do not need to sort the results by TSF
-    decoder.set_output_queue(work_queue)
-    decoder.disable_pwr_decoding(False)
-    decoder.start()
+        self.work_queue = mp.Queue()
+        self.output_queue = mp.Queue()
 
-    # Setup scanner and data hub
-    scanner = AthSpectralScanner(interface=interface)
-    hub = DataHub(scanner=scanner, decoder=decoder)
+        # Setup decoder
+        self.decoder = AthSpectralScanDecoder()
+        self.decoder.set_number_of_processes(1)  # so we do not need to sort the results by TSF
+        self.decoder.set_output_queue(self.work_queue)
+        self.decoder.disable_pwr_decoding(False)
 
-    #scanner.set_mode("chanscan")
-    scanner.set_spectral_short_repeat(1)
-    scanner.set_mode("background")
-    scanner.set_channel(1)
+        self.decoder.start()
 
+        # Setup scanner and data hub
+        self.scanner = AthSpectralScanner(interface=wifi.constants.interface)
+        self.hub = DataHub(scanner=self.scanner, decoder=self.decoder)
 
-    # Start to read from spectral_scan0
-    hub.start()
-    # Start to acquire dara
-    scanner.start()
-    logger.info("Collect data for 10 seconds")
+    def start(self):
+        #scanner.set_mode("chanscan")
+        self.scanner.set_spectral_short_repeat(1)
+        self.scanner.set_mode("background")
+        self.scanner.set_channel(1)
 
-    start_time = time.time()
+        self.hub.start()
+        self.scanner.start()
 
-    while time.time() - start_time < 10:
-        (ts, (tsf, freq, noise, rssi, pwr)) = work_queue.get(block=True)
-        print(ts, tsf, freq, noise, rssi, pwr)
+        self.logger.info("Collect data for 10 seconds")
 
-    # Tear down hardware
-    scanner.stop()
-    hub.stop()
+        start_time = time.time()
+
+        while time.time() - start_time < 10:
+            (ts, (tsf, freq, noise, rssi, pwr)) = self.work_queue.get(block=True)
+            print(ts, tsf, freq, noise, rssi, pwr)
+
+        # Tear down hardware
+        self.scanner.stop()
+        self.hub.stop()
+
+    def _setup_logging(self):
+        # Setup logger
+        self.logger = logging.getLogger()
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter(
+                '%(name)-12s %(levelname)-8s %(message)s')
+        handler.setFormatter(formatter)
+        self.logger.addHandler(handler)
+        self.logger.setLevel(logging.DEBUG)
+    
+    def get_output_queue(self):
+        return self.output_queue
