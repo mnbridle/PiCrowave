@@ -10,11 +10,18 @@ def main():
     fb = Framebuffer(constants.framebuffer_number)
 
     wifi_spectral_data = spectral_data.SpectralData()
-    wifi_spectral_data.start()
+    wifi_spectral_data.start(channel=1)
 
     # Get test data
+    work_queue = wifi_spectral_data.get_work_queue()
+
     while True:
-        rf_data = test_data.full_spectrum_fft(min_freq=2400000, max_freq=2540000, freq_resolution=5000)
-        ui.spectral_plot.show_band(fb, rf_data)
+        try:
+            (ts, (tsf, freq, noise, rssi, pwr)) = work_queue.get(block=True)
+            rf_data = np.array(list(pwr.items()))
+            ui.spectral_plot.show_band(fb, rf_data)
+        except KeyboardInterrupt as e:
+            wifi_spectral_data.stop()
+            break
 
 main()

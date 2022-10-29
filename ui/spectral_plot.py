@@ -28,6 +28,8 @@ def show_band(fb, rf_data, location=(30, 20), size=(280, 200), gridlines=(1, 10)
     # Freq will be on x, pwr on y
     # Work out scalings
     freq_span = (freq_max - freq_min)
+    pwr_min = abs(pwr_min)
+    pwr_max = abs(pwr_max)
     pwr_span = pwr_max - pwr_min
 
     # Next, work out MHz and dBm per pixel
@@ -56,11 +58,11 @@ def show_band(fb, rf_data, location=(30, 20), size=(280, 200), gridlines=(1, 10)
         rf_power = data_point[1]
 
         x = int(((frequency - freq_min) / freq_per_px) + location[0])
-        y = int((-(rf_power - pwr_min) / pwr_per_px) + location[1])
+        y = int(((rf_power - pwr_min) / pwr_per_px) + location[1])
 
         if old_data is None:
             old_data = (x, y)
-            
+
         new_data = (x, y)
 
         draw.ellipse([(x-1, y-1), (x+1, y+1)], fill="yellow")

@@ -27,26 +27,18 @@ class SpectralData(object):
         self.scanner = AthSpectralScanner(interface=wifi.constants.interface)
         self.hub = DataHub(scanner=self.scanner, decoder=self.decoder)
 
-    def start(self):
-        #scanner.set_mode("chanscan")
+    def start(self, channel=1):
+        self.hub.start()
+        self.change_channel(channel)
+
+    def change_channel(self, channel):
+        self.scanner.stop()
         self.scanner.set_spectral_short_repeat(1)
         self.scanner.set_mode("background")
-        self.scanner.set_channel(1)
-
-        self.hub.start()
+        self.scanner.set_channel(channel)
         self.scanner.start()
 
-        self.logger.info("Collect data for 10 seconds")
-
-        start_time = time.time()
-
-        while time.time() - start_time < 10:
-            (ts, (tsf, freq, noise, rssi, pwr)) = self.work_queue.get(block=True)
-            # print(ts, tsf, freq, noise, rssi, pwr)
-            data = list(pwr.items())
-            print(np.array(data))
-
-        # Tear down hardware
+    def stop(self):
         self.scanner.stop()
         self.hub.stop()
 
@@ -62,3 +54,6 @@ class SpectralData(object):
     
     def get_output_queue(self):
         return self.output_queue
+
+    def get_work_queue(self):
+        return self.work_queue
