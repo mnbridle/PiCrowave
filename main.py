@@ -1,3 +1,5 @@
+import numpy as np
+
 from framebuffer.framebuffer import Framebuffer
 from framebuffer import constants
 
