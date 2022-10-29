@@ -33,12 +33,12 @@ def spectral_demo(fb, spectral_data, avg_count = 100):
 def main():
     fb = Framebuffer(constants.framebuffer_number)
 
-    wifi_spectral_data = spectral_data.SpectralData()
-    wifi_spectral_data.start(channel=1)
+    wifi_rf = spectral_data.SpectralData()
+    wifi_rf.start(channel=1)
 
     try:
-        spectral_demo(fb, spectral_data)
+        spectral_demo(fb, wifi_rf)
     except KeyboardInterrupt as e:
-        wifi_spectral_data.stop()
+        wifi_rf.stop()
 
 main()
