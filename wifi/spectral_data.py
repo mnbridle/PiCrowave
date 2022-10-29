@@ -71,3 +71,4 @@ class SpectralData(object):
     def clear_queue(self):
         while not self.work_queue.empty():
             self.work_queue.get()
+        print("Queue emptied")

@@ -39,7 +39,7 @@ def main():
     wifi_rf.start(channel=1)
 
     try:
-        spectral_demo(fb, wifi_rf, avg_count = 50)
+        spectral_demo(fb, wifi_rf, avg_count = 200)
     except KeyboardInterrupt as e:
         wifi_rf.stop()
 
