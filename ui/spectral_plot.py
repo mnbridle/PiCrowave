@@ -25,9 +25,7 @@ def show_band(fb, rf_data, location=(30, 20), size=(280, 200), gridlines=(1, 10)
     # Freq will be on x, pwr on y
     # Work out scalings
     freq_span = (freq_max - freq_min)
-    pwr_min = abs(pwr_min)
-    pwr_max = abs(pwr_max)
-    pwr_span = pwr_min - pwr_max
+    pwr_span = abs(pwr_max - pwr_min)
 
     print(f"Freq span: {freq_span}, power span: {pwr_span}")
     print(f"Freq_min: {freq_min}, freq_max: {freq_max}")
@@ -58,11 +56,10 @@ def show_band(fb, rf_data, location=(30, 20), size=(280, 200), gridlines=(1, 10)
 
     old_data = None
     for data_point in rf_data:
-        frequency = (data_point[0] / 1000)
-        rf_power = data_point[1]
+        frequency, rf_power = data_point
 
         x = int(((frequency - freq_min) / freq_per_px) + location[0])
-        y = int(((rf_power - pwr_min) / pwr_per_px) + location[1])
+        y = int((abs(rf_power - pwr_min) / pwr_per_px) + location[1])
 
         if old_data is None:
             old_data = (x, y)
