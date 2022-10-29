@@ -16,7 +16,7 @@ def spectral_demo(fb, spectral_data, avg_count = 100):
         cuml_rf_data = None
         while count < avg_count:
             # Add things together
-            (_, (_, _, _, _, pwr)) = wifi_spectral_data.get_queue_data()
+            (_, (_, _, _, _, pwr)) = spectral_data.get_queue_data()
             rf_data = np.array(list(pwr.items()))
 
             if cuml_rf_data is None:
