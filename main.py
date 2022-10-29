@@ -28,9 +28,9 @@ def spectral_demo(fb, spectral_data, avg_count = 100):
         
         cuml_rf_data[:, 1] = cuml_rf_data[:, 1] / count
         print(f"In buffer: {spectral_data.get_queue_size()}")
+        spectral_data.clear_queue()
 
         ui.spectral_plot.show_band(fb, cuml_rf_data)
-
 
 def main():
     fb = Framebuffer(constants.framebuffer_number)
