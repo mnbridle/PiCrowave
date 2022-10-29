@@ -40,6 +40,5 @@ def main():
         spectral_demo(fb, spectral_data)
     except KeyboardInterrupt as e:
         wifi_spectral_data.stop()
-        break
 
 main()
