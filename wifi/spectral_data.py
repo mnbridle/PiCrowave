@@ -29,7 +29,10 @@ class SpectralData(object):
 
     def start(self, channel=1):
         self.hub.start()
-        self.change_channel(channel)
+        self.scanner.set_spectral_short_repeat(1)
+        self.scanner.set_mode("background")
+        self.scanner.set_channel(channel)
+        self.scanner.start()
 
     def change_channel(self, channel):
         self.scanner.stop()
@@ -57,3 +60,6 @@ class SpectralData(object):
 
     def get_work_queue(self):
         return self.work_queue
+
+    def get_queue_data(self):
+        return self.work_queue.get(block=True)

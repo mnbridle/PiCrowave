@@ -14,15 +14,13 @@ def main():
     wifi_spectral_data = spectral_data.SpectralData()
     wifi_spectral_data.start(channel=1)
 
-    # Get test data
-    work_queue = wifi_spectral_data.get_work_queue()
-
     while True:
         try:
             print("Getting data")
-            (ts, (tsf, freq, noise, rssi, pwr)) = work_queue.get(block=True)
+            (ts, (tsf, freq, noise, rssi, pwr)) = wifi_spectral_data.get_queue_data()
             print(ts)
             rf_data = np.array(list(pwr.items()))
+
             ui.spectral_plot.show_band(fb, rf_data)
         except KeyboardInterrupt as e:
             wifi_spectral_data.stop()
