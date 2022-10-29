@@ -3,7 +3,7 @@ from PIL import ImageDraw, Image, ImageFont
 def show_channel(fb, channel_number: int = 1):
     pass
 
-def show_band(fb, rf_data, location=(30, 20), size=(280, 200), gridlines=(1, 10)):
+def show_band(fb, rf_data, location=(30, 20), size=(280, 200), gridlines=(1, 10), autoscale=True):
     # Initialise image in framebuffer
     image = Image.new("RGBA", fb.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(image)
@@ -21,6 +21,10 @@ def show_band(fb, rf_data, location=(30, 20), size=(280, 200), gridlines=(1, 10)
     # Find min and max of each axes in the dataset
     freq_min, pwr_min = rf_data.min(axis=0)
     freq_max, pwr_max = rf_data.max(axis=0)
+
+    if autoscale:
+        pwr_min = -150
+        pwr_max = -30
 
     # Freq will be on x, pwr on y
     # Work out scalings
