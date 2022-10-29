@@ -30,6 +30,7 @@ def show_band(fb, rf_data, location=(30, 20), size=(280, 200), gridlines=(1, 10)
     pwr_span = pwr_min - pwr_max
 
     print(f"Freq span: {freq_span}, power span: {pwr_span}")
+    print(f"Freq_min: {freq_min}, freq_max: {freq_max}")
 
     # Next, work out MHz and dBm per pixel
     freq_per_px = freq_span / size[0]
