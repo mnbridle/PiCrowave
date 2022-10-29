@@ -52,7 +52,7 @@ def show_band(fb, rf_data, location=(30, 20), size=(280, 200), gridlines=(1, 10)
 
     old_data = None
     for data_point in rf_data:
-        frequency = (data_point[0] / 1000) - 
+        frequency = (data_point[0] / 1000)
         rf_power = data_point[1]
 
         x = int(((frequency - freq_min) / freq_per_px) + location[0])
@@ -60,6 +60,7 @@ def show_band(fb, rf_data, location=(30, 20), size=(280, 200), gridlines=(1, 10)
 
         if old_data is None:
             old_data = (x, y)
+            
         new_data = (x, y)
 
         draw.ellipse([(x-1, y-1), (x+1, y+1)], fill="yellow")
