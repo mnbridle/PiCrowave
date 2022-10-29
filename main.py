@@ -21,7 +21,8 @@ def main():
             print(ts)
             rf_data = np.array(list(pwr.items()))
 
-            # ui.spectral_plot.show_band(fb, rf_data)
+            ui.spectral_plot.show_band(fb, rf_data)
+            
         except KeyboardInterrupt as e:
             wifi_spectral_data.stop()
             break
