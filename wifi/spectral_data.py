@@ -28,10 +28,11 @@ class SpectralData(object):
         self.hub = DataHub(scanner=self.scanner, decoder=self.decoder)
 
     def start(self, channel=1):
-        self.hub.start()
         self.scanner.set_spectral_short_repeat(1)
         self.scanner.set_mode("background")
         self.scanner.set_channel(channel)
+
+        self.hub.start()
         self.scanner.start()
 
     def change_channel(self, channel):
