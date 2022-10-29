@@ -32,15 +32,21 @@ def show_band(fb, rf_data, location=(30, 20), size=(280, 200), gridlines=(1, 10)
     pwr_max = abs(pwr_max)
     pwr_span = pwr_max - pwr_min
 
+    print(f"Freq span: {freq_span}, power span: {pwr_span}")
+
     # Next, work out MHz and dBm per pixel
     freq_per_px = freq_span / size[0]
     pwr_per_px = pwr_span / size[1]
+
+    print(f"Freq per px: {freq_per_px}, pwr per px: {pwr_per_px}")
 
     # Work out interval for gridlines
     grid_intervals = [
         (gridlines[0] / freq_span) * size[0],
         (gridlines[1] / pwr_span) * size[1]
     ]
+
+    print(f"Grid intervals: {grid_intervals}")
 
     x = location[0]
     y = location[1]
