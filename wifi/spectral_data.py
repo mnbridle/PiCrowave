@@ -64,3 +64,6 @@ class SpectralData(object):
 
     def get_queue_data(self):
         return self.work_queue.get(block=True)
+
+    def get_queue_size(self):
+        return self.work_queue.qsize()
