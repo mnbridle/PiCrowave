@@ -19,7 +19,9 @@ def main():
 
     while True:
         try:
+            print("Getting data")
             (ts, (tsf, freq, noise, rssi, pwr)) = work_queue.get(block=True)
+            print(ts)
             rf_data = np.array(list(pwr.items()))
             ui.spectral_plot.show_band(fb, rf_data)
         except KeyboardInterrupt as e:
