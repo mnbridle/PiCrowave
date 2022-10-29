@@ -3,59 +3,60 @@ from PIL import ImageDraw, Image, ImageFont
 def show_channel(fb, channel_number: int = 1):
     pass
 
-def show_band(fb, rf_data):
+def show_band(fb, rf_data, location=(30, 20), size=(280, 200), gridlines=(1, 10))
     # Initialise image in framebuffer
     image = Image.new("RGBA", fb.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(image)
 
-    # Draw grid
-    # 15 lines, 20px =
-    # RSSI from -96 to -26 = 70dBm
-    # Every 10dBm -> 7 lines -> 240/7 = 30
-
+    # Initialise fonts
     small_fnt = ImageFont.truetype("Pillow/Tests/fonts/FreeMono.ttf", 10)
     hdg_fnt = ImageFont.truetype("Pillow/Tests/fonts/FreeMono.ttf", 16)
 
-    # Boundaries: (come out 20px each side)
-    # Top left corner: (30, 20)
-    # Top right corner: (310, 20)
-    # Bottom left corner: (30, 220)
-    # Bottom right corner: (310, 220)
-    # Frequency: 2400 - 2540MHz
-    # RF power: -20 to -120dBm
-
-    minX = 30
-    maxX = 310
-    minY = 20
-    maxY = 220
-
+    # Display window
     shape = [(0, 0), (320, 240)]
     draw.rectangle(shape, fill="#000000", outline="black")
-
-    shape = [(minX, minY), (maxX, maxY)]
+    shape = [location, tuple([sum(tup) for tup in zip(location, size)])]
     draw.rectangle(shape, fill="#101010", outline="white")
 
-    for x in range(minX, maxX, 20):
-        draw.line((x, minY, x, maxY), fill="green")
-        if (x % 40 == 0):
-            label = f"{int(2380 + (x/2))}"
-            draw.text((x-25, maxY), label.rjust(6), font=small_fnt, fill="green")
+    # Find min and max of each axes in the dataset
+    freq_min, pwr_min = rf_data.min(axis=0)
+    freq_max, pwr_max = rf_data.max(axis=0)
 
-    for y in range(minY, maxY, 20):
-        draw.line((minX, y, maxX, y), fill="white")
-        label = f"{int(-30 - (y-20)/2)}"
-        draw.text((0, y+15), label.rjust(4), font=small_fnt, fill="green")
+    freq_min /= 1000
+    freq_max /= 1000
 
-    draw.text((50, 0), "SPECTRAL ANALYSIS", font=hdg_fnt, fill="red")
+    # Freq will be on x, pwr on y
+    # Work out scalings
+    freq_span = (freq_max - freq_min)
+    pwr_span = pwr_max - pwr_min
 
-    # Convert frequency to x pixel
+    # Next, work out MHz and dBm per pixel
+    freq_per_px = freq_span / size[0]
+    pwr_per_px = pwr_span / size[1]
+
+    # Work out interval for gridlines
+    grid_intervals = [
+        (gridlines[0] / freq_span) * size[0],
+        (gridlines[1] / pwr_span) * size[1]
+    ]
+
+    x = location[0]
+    y = location[1]
+    while x < location[0] + size[0]:
+        draw.line((x, location[1], x, location[1] + size[1]), fill="green")
+        x += int(grid_intervals[0])
+
+    while y < location[1] + size[1]:
+        draw.line((location[0], y, location[0] + size[0], y), fill="green")
+        y += int(grid_intervals[1])
+
     old_data = None
     for data_point in rf_data:
-        frequency = data_point[0] / 1000
+        frequency = (data_point[0] / 1000) - 
         rf_power = data_point[1]
 
-        x = int(((frequency - 2400) * 2) + minX)
-        y = int((-((rf_power + 20) * 2)) + minY)
+        x = int(((frequency - freq_min) / freq_per_px) + location[0])
+        y = int((-(rf_power - pwr_min) / pwr_per_px) + location[1])
 
         if old_data is None:
             old_data = (x, y)
@@ -65,5 +66,5 @@ def show_band(fb, rf_data):
         draw.line([old_data, new_data], fill="yellow")
 
         old_data = new_data
-
+    
     fb.show(image)
