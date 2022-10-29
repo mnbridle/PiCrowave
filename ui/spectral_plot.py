@@ -3,7 +3,7 @@ from PIL import ImageDraw, Image, ImageFont
 def show_channel(fb, channel_number: int = 1):
     pass
 
-def show_band(fb, rf_data, location=(30, 20), size=(280, 200), gridlines=(1, 10))
+def show_band(fb, rf_data, location=(30, 20), size=(280, 200), gridlines=(1, 10)):
     # Initialise image in framebuffer
     image = Image.new("RGBA", fb.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(image)
