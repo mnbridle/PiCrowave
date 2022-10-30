@@ -23,10 +23,9 @@ def spectral_demo(fb, spectral_data, avg_count = 100):
                 cuml_rf_data = rf_data
             else:
                 cuml_rf_data[:, 1] += rf_data[:, 1]
+                cuml_rf_data[:, 1] = np.maximum(rf_data[:, 1], cuml_rf_data[:, 1])
             count += 1
 
-        
-        cuml_rf_data[:, 1] = cuml_rf_data[:, 1] / count
         print(f"In buffer: {spectral_data.get_queue_size()}")
         spectral_data.clear_queue()
 
