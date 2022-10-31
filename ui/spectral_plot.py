@@ -1,6 +1,6 @@
 from PIL import ImageDraw, Image, ImageFont
 
-def initialise_image(fb, location=(30, 20), size=(280, 200)):
+def initialise_image(fb, location=(30, 20), size=(280, 200), gridlines=(1, 10)):
     # Initialise image in framebuffer
     image = Image.new("RGBA", fb.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(image)
@@ -15,60 +15,27 @@ def initialise_image(fb, location=(30, 20), size=(280, 200)):
     shape = [location, tuple([sum(tup) for tup in zip(location, size)])]
     draw.rectangle(shape, fill="#101010", outline="white")
 
-    return {"image": image, "draw": draw, "small_fnt": small_fnt, "hdg_fnt": hdg_fnt}
+    # Draw gridlines
+    pwr_min = -150
+    pwr_max = -30
 
-def show_channel(fb, channel_number: int = 1):
-    pass
-
-def show_band(fb, rf_data, image_data, location=(30, 20), size=(280, 200), gridlines=(1, 10), autoscale=False):
-    image = image_data["image"]
-    draw = image_data["draw"]
-    small_fnt = image_data["small_fnt"]
-    hdg_fnt = image_data["hdg_fnt"]
-
-    # # Initialise image in framebuffer
-    # image = Image.new("RGBA", fb.size, (0, 0, 0, 0))
-    # draw = ImageDraw.Draw(image)
-
-    # # Initialise fonts
-    # small_fnt = ImageFont.truetype("Pillow/Tests/fonts/FreeMono.ttf", 10)
-    # hdg_fnt = ImageFont.truetype("Pillow/Tests/fonts/FreeMono.ttf", 16)
-
-    # Display window
-    shape = [(0, 0), (320, 240)]
-    draw.rectangle(shape, fill="#000000", outline="black")
-    shape = [location, tuple([sum(tup) for tup in zip(location, size)])]
-    draw.rectangle(shape, fill="#101010", outline="white")
-
-    # Find min and max of each axes in the dataset
-    freq_min, pwr_min = rf_data.min(axis=0)
-    freq_max, pwr_max = rf_data.max(axis=0)
-
-    if not autoscale:
-        pwr_min = -150
-        pwr_max = -30
+    freq_min = 2400
+    freq_max = 2430
 
     # Freq will be on x, pwr on y
     # Work out scalings
     freq_span = (freq_max - freq_min)
     pwr_span = abs(pwr_max - pwr_min)
 
-    print(f"Freq span: {freq_span}, power span: {pwr_span}")
-    print(f"Freq_min: {freq_min}, freq_max: {freq_max}")
-
     # Next, work out MHz and dBm per pixel
     freq_per_px = freq_span / size[0]
     pwr_per_px = pwr_span / size[1]
-
-    print(f"Freq per px: {freq_per_px}, pwr per px: {pwr_per_px}")
 
     # Work out interval for gridlines
     grid_intervals = [
         (gridlines[0] / freq_span) * size[0],
         (gridlines[1] / pwr_span) * size[1]
     ]
-
-    print(f"Grid intervals: {grid_intervals}")
 
     x = location[0]
     y = location[1]
@@ -79,6 +46,27 @@ def show_band(fb, rf_data, image_data, location=(30, 20), size=(280, 200), gridl
     while y < location[1] + size[1]:
         draw.line((location[0], y, location[0] + size[0], y), fill="green")
         y += int(grid_intervals[1])
+
+    return {"image": image, "draw": draw, "small_fnt": small_fnt, "hdg_fnt": hdg_fnt,
+    "freq_min": freq_min, "freq_max": freq_max,
+    "pwr_min": pwr_min, "pwr_max": pwr_max,
+    "freq_per_px": freq_per_px,
+    "pwr_per_px": pwr_per_px}
+
+def show_channel(fb, channel_number: int = 1):
+    pass
+
+def show_band(fb, rf_data, image_data, location=(30, 20)):
+    image = image_data["image"]
+    draw = image_data["draw"]
+    # small_fnt = image_data["small_fnt"]
+    # hdg_fnt = image_data["hdg_fnt"]
+    freq_min = image_data["freq_min"]
+    # freq_max = image_data["freq_max"]
+    pwr_min = image_data["pwr_min"]
+    # pwr_max = image_data["pwr_max"]
+    freq_per_px = image_data["freq_per_px"]
+    pwr_per_px = image_data["pwr_per_px"]
 
     old_data = None
     for data_point in rf_data:
