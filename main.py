@@ -11,10 +11,12 @@ import ui.spectral_plot
 def spectral_demo(fb, spectral_data, avg_count = 100):
     # This will need to be fast
     # Get the data, average the samples, pump out a plot
+    image_data = ui.spectral_plot.initialise_image()
+
     while(1):
         print("Any data?")
         rf_data = spectral_data.get_queue_data()
-        ui.spectral_plot.show_band(fb, rf_data)
+        ui.spectral_plot.show_band(fb, rf_data, image_data)
 
 def main():
     fb = Framebuffer(constants.framebuffer_number)

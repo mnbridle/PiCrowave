@@ -1,9 +1,6 @@
 from PIL import ImageDraw, Image, ImageFont
 
-def show_channel(fb, channel_number: int = 1):
-    pass
-
-def show_band(fb, rf_data, location=(30, 20), size=(280, 200), gridlines=(1, 10), autoscale=False):
+def initialise_image():
     # Initialise image in framebuffer
     image = Image.new("RGBA", fb.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(image)
@@ -11,6 +8,31 @@ def show_band(fb, rf_data, location=(30, 20), size=(280, 200), gridlines=(1, 10)
     # Initialise fonts
     small_fnt = ImageFont.truetype("Pillow/Tests/fonts/FreeMono.ttf", 10)
     hdg_fnt = ImageFont.truetype("Pillow/Tests/fonts/FreeMono.ttf", 16)
+
+    # Display window
+    shape = [(0, 0), (320, 240)]
+    draw.rectangle(shape, fill="#000000", outline="black")
+    shape = [location, tuple([sum(tup) for tup in zip(location, size)])]
+    draw.rectangle(shape, fill="#101010", outline="white")
+
+    return {"image": image, "draw": draw, "small_fnt": small_fnt, "hdg_fnt": hdg_fnt}
+
+def show_channel(fb, channel_number: int = 1):
+    pass
+
+def show_band(fb, rf_data, image_data, location=(30, 20), size=(280, 200), gridlines=(1, 10), autoscale=False):
+    image = image_data["image"]
+    draw = image_data["draw"]
+    small_fnt = image_data["small_fnt"]
+    hdg_fnt = image_data["hdg_fnt"]
+
+    # # Initialise image in framebuffer
+    # image = Image.new("RGBA", fb.size, (0, 0, 0, 0))
+    # draw = ImageDraw.Draw(image)
+
+    # # Initialise fonts
+    # small_fnt = ImageFont.truetype("Pillow/Tests/fonts/FreeMono.ttf", 10)
+    # hdg_fnt = ImageFont.truetype("Pillow/Tests/fonts/FreeMono.ttf", 16)
 
     # Display window
     shape = [(0, 0), (320, 240)]
