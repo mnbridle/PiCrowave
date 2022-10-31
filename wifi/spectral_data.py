@@ -15,7 +15,7 @@ class SpectralData(object):
 
         # Setup decoder
         self.decoder = AthSpectralScanDecoder()
-        self.decoder.set_number_of_processes(1)  # so we do not need to sort the results by TSF
+        self.decoder.set_number_of_processes(4)  # so we do not need to sort the results by TSF
         self.decoder.set_output_queue(self.output_queue)
         self.decoder.disable_pwr_decoding(False)
 
