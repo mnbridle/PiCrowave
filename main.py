@@ -6,6 +6,7 @@ from framebuffer import constants
 from wifi import test_data, spectral_data
 
 import ui.spectral_plot
+import time
 
 
 def spectral_demo(fb, spectral_data, channel):
@@ -13,7 +14,10 @@ def spectral_demo(fb, spectral_data, channel):
     # Get the data, average the samples, pump out a plot
 
     while(1):
+        start_time = time.time()
         rf_data = spectral_data.get_queue_data()
+        while time.time() - start_time < 0.1:
+            pass
         image_data = ui.spectral_plot.initialise_image(fb, channel=channel)
         ui.spectral_plot.show_band(fb, rf_data, image_data)
 
