@@ -61,8 +61,8 @@ class AthSpectralScanDecoder(object):
     def __init__(self, empty_input_queue_timeout_sec=1):
         self.input_queue = mp.Queue()
         self.input_queue_timeout = empty_input_queue_timeout_sec
-        self.output_queue = None
         self.process_queue = mp.Queue()
+        self.output_queue = None
         self.worker_pool = None
         self.number_of_processes = 1
         self.shut_down = mp.Event()
@@ -70,7 +70,7 @@ class AthSpectralScanDecoder(object):
         self.work_done = mp.Event()
         self.work_done.clear()
         self.disable_pwr_decode = False
-        self.max_sample_count = 2500
+        self.max_sample_count = 1000
 
     def start(self):
         if self.output_queue is None:
@@ -100,7 +100,7 @@ class AthSpectralScanDecoder(object):
         self.input_queue.put(data)
 
     def _decode_data_process(self):
-        sample_count = 0
+        samples = []
 
         while not self.shut_down.is_set():
             try:
@@ -111,21 +111,23 @@ class AthSpectralScanDecoder(object):
                 continue
             # process data
             for decoded_sample in AthSpectralScanDecoder._decode(data, no_pwr=self.disable_pwr_decode):
-                self.process_queue.put(decoded_sample)
-                sample_count = self.process_queue.qsize()
+                (_, (_, _, _, _, pwr)) = decoded_sample
+                rf_data = np.array(list(pwr.items()))
+                samples.append(rf_data)
 
-            if sample_count > self.max_sample_count:
+            if len(samples) > self.max_sample_count:
                 cuml_rf_data = None
+                print(f"Sample count threshold exceeded: {len(samples)} > {self.max_sample_count}")
                 for i in range(0, self.max_sample_count):
-                    (_, (_, _, _, _, pwr)) = self.process_queue.get(block=True)
-                    rf_data = np.array(list(pwr.items()))
+                    rf_data = samples.pop() 
 
                     if cuml_rf_data is None:
                         cuml_rf_data = rf_data
                     else:
                         cuml_rf_data[:, 1] = np.maximum(rf_data[:, 1], cuml_rf_data[:, 1])
                 self.output_queue.put(cuml_rf_data)
-                    
+                print("Done!")
+
 
     @staticmethod
     def _decode(data, no_pwr=False):
