@@ -1,6 +1,6 @@
 from PIL import ImageDraw, Image, ImageFont
 
-def initialise_image():
+def initialise_image(fb):
     # Initialise image in framebuffer
     image = Image.new("RGBA", fb.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(image)

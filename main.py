@@ -8,10 +8,10 @@ from wifi import test_data, spectral_data
 import ui.spectral_plot
 
 
-def spectral_demo(fb, spectral_data, avg_count = 100):
+def spectral_demo(fb, spectral_data):
     # This will need to be fast
     # Get the data, average the samples, pump out a plot
-    image_data = ui.spectral_plot.initialise_image()
+    image_data = ui.spectral_plot.initialise_image(fb)
 
     while(1):
         print("Any data?")
@@ -25,7 +25,7 @@ def main():
     wifi_rf.start(channel=1)
 
     try:
-        spectral_demo(fb, wifi_rf, avg_count = 200)
+        spectral_demo(fb, wifi_rf)
     except KeyboardInterrupt as e:
         wifi_rf.stop()
 
