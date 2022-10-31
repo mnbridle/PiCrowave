@@ -11,14 +11,12 @@ import os
 class SpectralData(object):
     def __init__(self):
         self._setup_logging()
-
-        self.work_queue = mp.Queue()
         self.output_queue = mp.Queue()
 
         # Setup decoder
         self.decoder = AthSpectralScanDecoder()
         self.decoder.set_number_of_processes(8)  # so we do not need to sort the results by TSF
-        self.decoder.set_output_queue(self.work_queue)
+        self.decoder.set_output_queue(self.output_queue)
         self.decoder.disable_pwr_decoding(False)
 
         self.decoder.start()
@@ -58,16 +56,5 @@ class SpectralData(object):
     def get_output_queue(self):
         return self.output_queue
 
-    def get_work_queue(self):
-        return self.work_queue
-
     def get_queue_data(self):
-        return self.work_queue.get(block=True)
-
-    def get_queue_size(self):
-        return self.work_queue.qsize()
-
-    def clear_queue(self):
-        while not self.work_queue.empty():
-            self.work_queue.get()
-        print("Queue emptied")
+        return self.output_queue.get(block=True)

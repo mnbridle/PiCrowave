@@ -12,24 +12,8 @@ def spectral_demo(fb, spectral_data, avg_count = 100):
     # This will need to be fast
     # Get the data, average the samples, pump out a plot
     while(1):
-        count = 0
-        cuml_rf_data = None
-        while count < avg_count:
-            # Add things together
-            (_, (_, _, _, _, pwr)) = spectral_data.get_queue_data()
-            rf_data = np.array(list(pwr.items()))
-
-            if cuml_rf_data is None:
-                cuml_rf_data = rf_data
-            else:
-                cuml_rf_data[:, 1] += rf_data[:, 1]
-                cuml_rf_data[:, 1] = np.maximum(rf_data[:, 1], cuml_rf_data[:, 1])
-            count += 1
-
-        print(f"In buffer: {spectral_data.get_queue_size()}")
-        spectral_data.clear_queue()
-
-        ui.spectral_plot.show_band(fb, cuml_rf_data)
+        rf_data = spectral_data.get_queue_data()
+        ui.spectral_plot.show_band(fb, rf_data)
 
 def main():
     fb = Framebuffer(constants.framebuffer_number)

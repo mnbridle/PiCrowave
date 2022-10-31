@@ -27,6 +27,8 @@ from collections import OrderedDict
 import multiprocessing as mp
 from queue import Empty
 import logging
+import numpy as np
+
 logger = logging.getLogger(__name__)
 
 
@@ -60,6 +62,7 @@ class AthSpectralScanDecoder(object):
         self.input_queue = mp.Queue()
         self.input_queue_timeout = empty_input_queue_timeout_sec
         self.output_queue = None
+        self.process_queue = mp.Queue()
         self.worker_pool = None
         self.number_of_processes = 1
         self.shut_down = mp.Event()
@@ -67,6 +70,7 @@ class AthSpectralScanDecoder(object):
         self.work_done = mp.Event()
         self.work_done.clear()
         self.disable_pwr_decode = False
+        self.max_sample_count = 2500
 
     def start(self):
         if self.output_queue is None:
@@ -96,6 +100,8 @@ class AthSpectralScanDecoder(object):
         self.input_queue.put(data)
 
     def _decode_data_process(self):
+        sample_count = 0
+
         while not self.shut_down.is_set():
             try:
                 data = self.input_queue.get(timeout=self.input_queue_timeout)
@@ -105,7 +111,21 @@ class AthSpectralScanDecoder(object):
                 continue
             # process data
             for decoded_sample in AthSpectralScanDecoder._decode(data, no_pwr=self.disable_pwr_decode):
-                self.output_queue.put(decoded_sample)
+                self.process_queue.put(decoded_sample)
+                sample_count = self.process_queue.qsize()
+
+            if sample_count > self.max_sample_count:
+                cuml_rf_data = None
+                for sample_count in range(0, self.max_sample_count):
+                    (_, (_, _, _, _, pwr)) = self.process_queue.get()
+                    rf_data = np.array(list(pwr.items()))
+
+                    if cuml_rf_data is None:
+                        cuml_rf_data = rf_data
+                    else:
+                        cuml_rf_data[:, 1] = np.maximum(rf_data[:, 1], cuml_rf_data[:, 1])
+                self.output_queue.put(cuml_rf_data)
+                    
 
     @staticmethod
     def _decode(data, no_pwr=False):
