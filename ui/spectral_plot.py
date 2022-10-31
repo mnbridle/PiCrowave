@@ -26,20 +26,6 @@ def show_band(fb, rf_data, image_data, location=(30, 20), size=(280, 200), gridl
     small_fnt = image_data["small_fnt"]
     hdg_fnt = image_data["hdg_fnt"]
 
-    # # Initialise image in framebuffer
-    # image = Image.new("RGBA", fb.size, (0, 0, 0, 0))
-    # draw = ImageDraw.Draw(image)
-
-    # # Initialise fonts
-    # small_fnt = ImageFont.truetype("Pillow/Tests/fonts/FreeMono.ttf", 10)
-    # hdg_fnt = ImageFont.truetype("Pillow/Tests/fonts/FreeMono.ttf", 16)
-
-    # Display window
-    shape = [(0, 0), (320, 240)]
-    draw.rectangle(shape, fill="#000000", outline="black")
-    shape = [location, tuple([sum(tup) for tup in zip(location, size)])]
-    draw.rectangle(shape, fill="#101010", outline="white")
-
     # Find min and max of each axes in the dataset
     freq_min, pwr_min = rf_data.min(axis=0)
     freq_max, pwr_max = rf_data.max(axis=0)
@@ -72,12 +58,21 @@ def show_band(fb, rf_data, image_data, location=(30, 20), size=(280, 200), gridl
 
     x = location[0]
     y = location[1]
+    
+    freq = freq_min
     while x < location[0] + size[0]:
         draw.line((x, location[1], x, location[1] + size[1]), fill="green")
+        if x % (5*grid_intervals[0]) == 0:
+            draw.text((x, 220), f"{freq}", font=small_fnt, fill="yellow")
+        freq += gridlines[0]
         x += int(grid_intervals[0])
 
+    dbm = pwr_min        
     while y < location[1] + size[1]:
         draw.line((location[0], y, location[0] + size[0], y), fill="green")
+        if y % (2*grid_intervals[1]) == 0:
+            draw.text((0, y), f"{dbm}", font=small_fnt, fill="yellow")
+        dbm += gridlines[1]
         y += int(grid_intervals[1])
 
     old_data = None
