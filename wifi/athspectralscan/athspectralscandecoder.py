@@ -116,8 +116,8 @@ class AthSpectralScanDecoder(object):
 
             if sample_count > self.max_sample_count:
                 cuml_rf_data = None
-                for sample_count in range(0, self.max_sample_count):
-                    (_, (_, _, _, _, pwr)) = self.process_queue.get()
+                for i in range(0, self.max_sample_count):
+                    (_, (_, _, _, _, pwr)) = self.process_queue.get(block=True)
                     rf_data = np.array(list(pwr.items()))
 
                     if cuml_rf_data is None:
