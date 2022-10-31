@@ -70,7 +70,7 @@ class AthSpectralScanDecoder(object):
         self.work_done = mp.Event()
         self.work_done.clear()
         self.disable_pwr_decode = False
-        self.max_sample_count = 1000
+        self.max_sample_count = 500
 
     def start(self):
         if self.output_queue is None:
@@ -117,7 +117,6 @@ class AthSpectralScanDecoder(object):
 
             if len(samples) > self.max_sample_count:
                 cuml_rf_data = None
-                print(f"Sample count threshold exceeded: {len(samples)} > {self.max_sample_count}")
                 for i in range(0, self.max_sample_count):
                     rf_data = samples.pop() 
 
@@ -126,7 +125,6 @@ class AthSpectralScanDecoder(object):
                     else:
                         cuml_rf_data[:, 1] = np.maximum(rf_data[:, 1], cuml_rf_data[:, 1])
                 self.output_queue.put(cuml_rf_data)
-                print("Done!")
 
 
     @staticmethod
