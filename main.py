@@ -2,12 +2,11 @@ import copy
 import os
 import time
 import numpy as np
+from PIL import Image
 
 from framebuffer.framebuffer import Framebuffer
 from framebuffer import constants
-
 from wifi import test_data, spectral_data
-
 import ui.spectral_plot
 
 
@@ -16,10 +15,11 @@ def spectral_demo(fb, spectral_data, channel):
     # Get the data, average the samples, pump out a plot
 
     timetrack = time.time()
-    image_data = copy.copy(ui.spectral_plot.initialise_image(fb, channel=channel))
-    print(f"Took {time.time() - timetrack} to generate the image")
 
-    old_fb = copy.copy(fb)
+    background_image_obj = Image.new("RGBA", fb.size, (0, 0, 0, 0))
+    background_image_obj = ui.spectral_plot.initialise_image(background_image_obj, channel=channel)
+
+    print(f"Took {time.time() - timetrack} to generate the image")
 
     while(1):
         timetrack = time.time()
@@ -34,9 +34,15 @@ def spectral_demo(fb, spectral_data, channel):
         print(f"Time to get RF data: {time.time() - timetrack}")
 
         timetrack = time.time()
-        new_fb = copy.copy(old_fb)
-        ui.spectral_plot.show_band(new_fb, rf_data, image_data)
+        graph_image_obj = Image.new("RGBA", fb.size, (0, 0, 0, 0))
+        graph_image_obj = ui.spectral_plot.show_band(graph_image_obj, rf_data)
+
         print(f"Took {time.time() - timetrack} to plot the image")
+
+        # Write to framebuffer
+        # fb.show(background_image_obj)
+        fb.show(graph_image_obj)
+
 
 def main():
     channel = 7

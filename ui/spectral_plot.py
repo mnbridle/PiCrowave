@@ -3,9 +3,8 @@ from PIL import ImageDraw, Image, ImageFont
 import copy
 
 
-def initialise_image(fb, channel, location=(30, 20), size=(280, 200), freq_scale=(2400, 2483), pwr_scale=(-150, -30), gridlines=(10, 10)):
+def initialise_image(image, channel, location=(30, 20), size=(280, 200), freq_scale=(2400, 2483), pwr_scale=(-150, -30), gridlines=(10, 10)):
     # Initialise image in framebuffer
-    image = Image.new("RGBA", fb.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(image)
 
     # Initialise fonts
@@ -54,16 +53,10 @@ def initialise_image(fb, channel, location=(30, 20), size=(280, 200), freq_scale
 
     draw.text((0, 0), f"Spectrum analysis - channel {channel}", font=hdg_fnt, fill="yellow")
 
-    return {"image": image, "draw": draw, "small_fnt": small_fnt, "hdg_fnt": hdg_fnt}
+    return image
 
-def show_channel(fb, channel_number: int = 1):
-    pass
-
-def show_band(fb, rf_data, image_data, location=(30, 20), size=(280, 200), freq_scale=(2400, 2483), pwr_scale=(-150, -30), gridlines=(10, 10)):
-    image = copy.copy(image_data["image"])
-    draw = copy.copy(image_data["draw"])
-    small_fnt = copy.copy(image_data["small_fnt"])
-    hdg_fnt = copy.copy(image_data["hdg_fnt"])
+def show_band(image, rf_data, location=(30, 20), size=(280, 200), freq_scale=(2400, 2483), pwr_scale=(-150, -30), gridlines=(10, 10)):
+    draw = ImageDraw.Draw(image)
 
     # Draw gridlines
     pwr_min, pwr_max = pwr_scale
@@ -92,4 +85,4 @@ def show_band(fb, rf_data, image_data, location=(30, 20), size=(280, 200), freq_
         draw.line([old_data, new_data], fill="yellow")
         old_data = new_data
     
-    fb.show(image)
+    return image
