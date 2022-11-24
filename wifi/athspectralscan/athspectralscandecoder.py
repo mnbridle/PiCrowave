@@ -71,7 +71,7 @@ class AthSpectralScanDecoder(object):
         self.work_done = mp.Event()
         self.work_done.clear()
         self.disable_pwr_decode = False
-        self.max_sample_count = 500
+        self.max_sample_count = 20
 
     def start(self):
         if self.output_queue is None:
@@ -99,6 +99,7 @@ class AthSpectralScanDecoder(object):
 
     def enqueue(self, data):
         self.input_queue.put(data)
+        time.sleep(0.01)
 
     def _decode_data_process(self):
         samples = []
