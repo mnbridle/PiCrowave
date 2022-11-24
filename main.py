@@ -40,8 +40,8 @@ def spectral_demo(fb, spectral_data, channel):
         print(f"Took {time.time() - timetrack} to plot the image")
 
         # Write to framebuffer
-        # fb.show(background_image_obj)
-        fb.show(graph_image_obj)
+        new_img = Image.blend(background_image_obj, graph_image_obj, 0.5)
+        fb.show(new_img)
 
 
 def main():
