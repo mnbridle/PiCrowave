@@ -38,6 +38,11 @@ def spectral_demo(fb, spectral_data, channel):
         new_img = Image.blend(background_image_obj, graph_image_obj, 0.5)
         fb.show(new_img)
 
+        # Change channel
+        channel = (channel + 1 % 13)
+        print(f"Change to channel {channel}")
+        spectral_data.change_channel(channel=channel)
+
 
 def main():
     channel = 7
