@@ -39,9 +39,11 @@ def spectral_demo(fb, spectral_data, channel):
         fb.show(new_img)
 
         # Change channel
-        channel = (channel + 1 % 13)
-        print(f"Change to channel {channel}")
-        spectral_data.change_channel(channel=channel)
+        channel += 1
+        channel %= 14
+        
+        print(f"Change to channel {channel+1}")
+        spectral_data.change_channel(channel=channel+1)
 
 
 def main():

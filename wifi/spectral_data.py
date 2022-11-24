@@ -34,10 +34,7 @@ class SpectralData(object):
         self.scanner.start()
 
     def change_channel(self, channel):
-        self.scanner.stop()
-        self.scanner.set_mode("background")
         self.scanner.set_channel(channel)
-        self.scanner.start()
 
     def stop(self):
         self.scanner.stop()
