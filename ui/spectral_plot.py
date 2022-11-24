@@ -3,7 +3,7 @@ from PIL import ImageDraw, Image, ImageFont
 import copy
 
 
-def initialise_image(fb, channel, location=(30, 20), size=(280, 200), freq_scale=(2400, 2483), pwr_scale=(-150, -30), gridlines=(1, 10)):
+def initialise_image(fb, channel, location=(30, 20), size=(280, 200), freq_scale=(2400, 2483), pwr_scale=(-150, -30), gridlines=(10, 10)):
     # Initialise image in framebuffer
     image = Image.new("RGBA", fb.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(image)
@@ -59,7 +59,7 @@ def initialise_image(fb, channel, location=(30, 20), size=(280, 200), freq_scale
 def show_channel(fb, channel_number: int = 1):
     pass
 
-def show_band(fb, rf_data, image_data, location=(30, 20), size=(280, 200), freq_scale=(2400, 2483), pwr_scale=(-150, -30), gridlines=(1, 10)):
+def show_band(fb, rf_data, image_data, location=(30, 20), size=(280, 200), freq_scale=(2400, 2483), pwr_scale=(-150, -30), gridlines=(10, 10)):
     image = copy.copy(image_data["image"])
     draw = copy.copy(image_data["draw"])
     small_fnt = copy.copy(image_data["small_fnt"])
