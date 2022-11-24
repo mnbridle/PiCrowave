@@ -21,6 +21,7 @@
 ##
 
 import time
+import datetime
 import math
 import struct
 from collections import OrderedDict
@@ -126,6 +127,7 @@ class AthSpectralScanDecoder(object):
                         cuml_rf_data[:, 1] = np.maximum(rf_data[:, 1], cuml_rf_data[:, 1])
                 self.output_queue.put(cuml_rf_data)
 
+            print(datetime.datetime.now())
 
     @staticmethod
     def _decode(data, no_pwr=False):
