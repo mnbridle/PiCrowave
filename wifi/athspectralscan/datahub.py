@@ -127,7 +127,7 @@ class DataHub(object):
                 ts = datetime.datetime.now()
                 data = self.dump_file_in_handle.read()
                 if not data:
-                    time.sleep(0.1)
+                    time.sleep(0.05)
                     continue
                 else:
                     # if output is file, pack <ts><len><samples>

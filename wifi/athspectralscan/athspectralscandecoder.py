@@ -110,7 +110,6 @@ class AthSpectralScanDecoder(object):
                 self.work_done.clear()
             except Empty:
                 self.work_done.set()
-                time.sleep(0.01)
                 continue
             # process data
             for decoded_sample in AthSpectralScanDecoder._decode(data, no_pwr=self.disable_pwr_decode):
