@@ -75,6 +75,7 @@ def show_band(fb, rf_data, image_data, location=(30, 20), size=(280, 200), gridl
         y += int(grid_intervals[1])
 
     old_data = None
+    print(len(rf_data))
     for data_point in rf_data:
         frequency, rf_power = data_point
 
