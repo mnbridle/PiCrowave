@@ -16,8 +16,8 @@ def spectral_demo(fb, spectral_data, channel):
 
     while(1):
         start_time = time.time()
-        while time.time() - start_time < 0.5:
-            time.sleep(0.1)
+        while time.time() - start_time < 0.25:
+            time.sleep(0.05)
 
         rf_data = spectral_data.get_queue_data()
         channel = int(os.system("sudo iw wlan1 info | grep channel | cut -d' ' -f2"))

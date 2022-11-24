@@ -41,9 +41,6 @@ def show_band(fb, rf_data, image_data, location=(30, 20), size=(280, 200), gridl
     freq_span = (freq_max - freq_min)
     pwr_span = abs(pwr_max - pwr_min)
 
-    # print(f"Freq span: {freq_span}, power span: {pwr_span}")
-    # print(f"Freq_min: {freq_min}, freq_max: {freq_max}")
-
     # Next, work out MHz and dBm per pixel
     freq_per_px = freq_span / size[0]
     pwr_per_px = pwr_span / size[1]
