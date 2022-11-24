@@ -129,6 +129,7 @@ class AthSpectralScanDecoder(object):
                     else:
                         cuml_rf_data[:, 1] = np.maximum(rf_data[:, 1], cuml_rf_data[:, 1])
                 self.output_queue.put((ts, cuml_rf_data))
+                ts = []
 
     @staticmethod
     def _decode(data, no_pwr=False):
