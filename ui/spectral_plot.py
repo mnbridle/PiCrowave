@@ -72,10 +72,10 @@ def show_band(image, rf_data, location=(30, 20), size=(280, 200), freq_scale=(24
     pwr_per_px = pwr_span / size[1]
 
     # Reorder RF data
-    sorted_rf_data = rf_data[:, 0].argsort()
+    rf_data = rf_data[rf_data[:, 0].argsort()]
 
     old_data = None
-    for data_point in sorted_rf_data:
+    for data_point in rf_data:
         frequency, rf_power = data_point
 
         x = int(((frequency - freq_min) / freq_per_px) + location[0])
