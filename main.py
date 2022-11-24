@@ -23,8 +23,10 @@ def spectral_demo(fb, spectral_data, channel):
 
     while(1):
         timetrack = time.time()
-        rf_data = spectral_data.get_queue_data()
+        ts, rf_data = spectral_data.get_queue_data()
         print(f"Time to get RF data: {time.time() - timetrack}")
+
+        print(f"Timestamp: {ts}")
 
         timetrack = time.time()
         graph_image_obj = Image.new("RGBA", fb.size, (0, 0, 0, 0))

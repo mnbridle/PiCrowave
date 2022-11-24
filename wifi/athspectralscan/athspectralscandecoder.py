@@ -112,7 +112,7 @@ class AthSpectralScanDecoder(object):
                 continue
             # process data
             for decoded_sample in AthSpectralScanDecoder._decode(data, no_pwr=self.disable_pwr_decode):
-                (_, (_, _, _, _, pwr)) = decoded_sample
+                (ts, (_, _, _, _, pwr)) = decoded_sample
                 rf_data = np.array(list(pwr.items()))
                 samples.append(rf_data)
 
@@ -125,9 +125,7 @@ class AthSpectralScanDecoder(object):
                         cuml_rf_data = rf_data
                     else:
                         cuml_rf_data[:, 1] = np.maximum(rf_data[:, 1], cuml_rf_data[:, 1])
-                self.output_queue.put(cuml_rf_data)
-
-            print(datetime.datetime.now())
+                self.output_queue.put((ts, cuml_rf_data))
 
     @staticmethod
     def _decode(data, no_pwr=False):
