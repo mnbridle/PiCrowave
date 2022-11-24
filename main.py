@@ -23,7 +23,7 @@ def spectral_demo(fb, spectral_data, channel):
 
     while(1):
         full_frame = None
-        for channel in [1, 4, 7, 10, 13]:
+        for channel in [1, 5, 9, 13]:
             spectral_data.change_channel(channel=channel)
             _, rf_data = spectral_data.get_queue_data()
 
