@@ -22,30 +22,24 @@ def spectral_demo(fb, spectral_data, channel):
     print(f"Took {time.time() - timetrack} to generate the image")
 
     while(1):
-        timetrack = time.time()
-        ts, rf_data = spectral_data.get_queue_data()
-        print(f"Time to get RF data: {time.time() - timetrack}")
+        full_frame = None
+        for channel in range(1, 13):
+            spectral_data.change_channel(channel=channel)
+            _, rf_data = spectral_data.get_queue_data()
 
-        print(f"Timestamp: {ts}")
+            if full_frame is None:
+                full_frame = rf_data
+            else:
+                full_frame = np.concatenate((full_frame, rf_data), axis=0)
 
         timetrack = time.time()
         graph_image_obj = Image.new("RGBA", fb.size, (0, 0, 0, 0))
-        graph_image_obj = ui.spectral_plot.show_band(graph_image_obj, rf_data)
-
+        graph_image_obj = ui.spectral_plot.show_band(graph_image_obj, full_frame)
         print(f"Took {time.time() - timetrack} to plot the image")
 
         # Write to framebuffer
         new_img = Image.blend(background_image_obj, graph_image_obj, 0.5)
         fb.show(new_img)
-
-        # Change channel
-        channel += 1
-        channel %= 14
-
-        timetrack = time.time()
-        print(f"Change to channel {channel+1}")
-        spectral_data.change_channel(channel=channel+1)
-        print(f"Took {time.time() - timetrack} to change channel")
 
 
 def main():
