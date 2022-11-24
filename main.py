@@ -41,9 +41,11 @@ def spectral_demo(fb, spectral_data, channel):
         # Change channel
         channel += 1
         channel %= 14
-        
+
+        timetrack = time.time()
         print(f"Change to channel {channel+1}")
         spectral_data.change_channel(channel=channel+1)
+        print(f"Took {time.time() - timetrack} to change channel")
 
 
 def main():
