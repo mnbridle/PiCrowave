@@ -23,13 +23,6 @@ def spectral_demo(fb, spectral_data, channel):
 
     while(1):
         timetrack = time.time()
-        start_time = time.time()
-        while time.time() - start_time < 0.25:
-            time.sleep(0.05)
-
-        print(f"Waited for {time.time() - timetrack}")
-
-        timetrack = time.time()
         rf_data = spectral_data.get_queue_data()
         print(f"Time to get RF data: {time.time() - timetrack}")
 
