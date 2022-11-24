@@ -157,13 +157,8 @@ class AthSpectralScanDecoder(object):
                 sdata = struct.unpack_from("56B", data, pos)
                 pos += 56
 
-                # calculate power in dBm
-                sumsq_sample = 0
-                samples = []
-                for raw_sample in sdata:
-                    sample = (raw_sample << max_exp)**2
-                    sumsq_sample += sample
-                    samples.append(sample)
+                samples = (np.array(sdata) << max_exp)**2
+                sumsq_sample = sum(samples)
 
                 if sumsq_sample == 0:
                     continue  # drop invalid sample (all sub-carriers are zero)
@@ -171,15 +166,11 @@ class AthSpectralScanDecoder(object):
 
                 # center freq / DC index is at bin 56/2=28 -> subcarrier_0 = freq - 28 * 0.3125 = freq - 8.75
                 subcarrier_0 = freq - 8.75
-                pwr = OrderedDict()
-                for i, sample in enumerate(samples):
-                    if sample == 0:                                         # this would break log()
-                        sample = sum(samples) / len(samples)                # anyone a better idea?
-                    subcarrier_i = subcarrier_0 + i * 0.3125
-                    sigval = noise + rssi + 10 * math.log10(sample) - sumsq_sample
-                    pwr[subcarrier_i] = sigval
-                # FIXME: add sigval for channel Sum(subcarriers):
-                # use log(x) + log(y) =  log(x*y) -> Sum(log(i)) = log(P(i)) with P as product
+
+                subcarriers = np.arange(subcarrier_0, subcarrier_0 + len(samples)*0.3125, 0.3125)
+                samples[samples == 0] = sum(samples) / len(samples)
+                sigvals = noise + rssi + 10*np.log10(samples) - sumsq_sample
+                pwr = OrderedDict(zip(list(subcarriers), list(sigvals)))
 
                 yield (ts, (tsf, freq, noise, rssi, pwr))
 
