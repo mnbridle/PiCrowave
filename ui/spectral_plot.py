@@ -80,7 +80,7 @@ def show_band(image, rf_data, location=(30, 20), size=(280, 200), freq_scale=(24
         frequency, rf_power = data_point
 
         x = int(((frequency - freq_min) / freq_per_px) + location[0])
-        y = int((abs(pwr_min - rf_power) / pwr_per_px) + location[1] + size[1])
+        y = int(size[1] - (abs(pwr_min - rf_power) / pwr_per_px) + location[1])
 
         if old_data is None:
             old_data = (x, y)
