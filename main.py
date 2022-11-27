@@ -20,10 +20,11 @@ def spectral_demo(fb, spectral_data):
     background_image_obj = ui.spectral_plot.initialise_image(background_image_obj, channel=1)
 
     print(f"Took {time.time() - timetrack} to generate the image")
-    spectral_data.start()
 
     while(1):
         all_rf_data = []
+
+        spectral_data.start()
         time.sleep(0.5)
 
         while not spectral_data.queue_is_empty():
@@ -64,7 +65,6 @@ def main():
     fb = Framebuffer(constants.framebuffer_number)
 
     wifi_rf = spectral_data.SpectralData()
-    wifi_rf.start()
 
     try:
         spectral_demo(fb, wifi_rf)
