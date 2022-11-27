@@ -27,7 +27,8 @@ class SpectralData(object):
 
     def start(self, channel=1):
         self.scanner.set_spectral_short_repeat(1)
-        self.scanner.set_mode("background")
+        self.scanner.set_mode("manual")
+        self.scanner.set_spectral_count(1)
         self.scanner.set_channel(channel)
 
         self.hub.start()
@@ -35,10 +36,6 @@ class SpectralData(object):
 
     def change_channel(self, channel):
         self.scanner.set_channel(channel)
-
-    def pause(self):
-        self.scanner.pause()
-        self.hub.pause()
 
     def stop(self):
         self.scanner.stop()

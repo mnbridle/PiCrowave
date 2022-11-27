@@ -28,16 +28,11 @@ def spectral_demo(fb, spectral_data, channel):
 
         for channel in [5, 9, 13]:
             spectral_data.change_channel(channel=channel)
+            _, rf_data = spectral_data.get_queue_data()
+            all_rf_data.append(rf_data)
             time.sleep(0.25)
 
         timetrack = time.time()
-        # Process the data
-        while not spectral_data.queue_is_empty():
-            _, rf_data = spectral_data.get_queue_data()
-            all_rf_data.append(rf_data)
-
-        spectral_data.pause()
-
         # Get data frame
         data_frame = np.concatenate((all_rf_data), axis=0)
         sorted_data_frame = data_frame[data_frame[:, 0].argsort()]
