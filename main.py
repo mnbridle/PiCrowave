@@ -20,7 +20,7 @@ def spectral_demo(fb, spectral_data, channel):
     background_image_obj = ui.spectral_plot.initialise_image(background_image_obj, channel=channel)
 
     print(f"Took {time.time() - timetrack} to generate the image")
-    spectral_data.start(channel=1)
+    spectral_data.start()
 
     while(1):
         all_rf_data = []
