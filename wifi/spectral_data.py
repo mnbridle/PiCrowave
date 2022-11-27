@@ -58,4 +58,5 @@ class SpectralData(object):
         return self.output_queue.get(block=True)
 
     def queue_is_empty(self):
+        print(f"Size of queue: {self.output_queue.qsize()}")
         return self.output_queue.empty()
