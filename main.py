@@ -28,13 +28,13 @@ def spectral_demo(fb, spectral_data, channel):
             spectral_data.change_channel(channel=channel)
             time.sleep(0.25)
 
-        spectral_data.pause()
-
         timetrack = time.time()
         # Process the data
-        while spectral_data.queue_is_empty():
+        while not spectral_data.queue_is_empty():
             _, rf_data = spectral_data.get_queue_data()
             all_rf_data.append(rf_data)
+
+        spectral_data.pause()
 
         # Get data frame
         data_frame = np.concatenate((all_rf_data), axis=0)
