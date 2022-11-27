@@ -78,6 +78,17 @@ class DataHub(object):
         self.reader_thread = threading.Thread(target=self._distribute_data, args=())
         self.reader_thread.start()
 
+    def pause(self):
+        if self.reader_thread is None:
+            return
+        self.stop_reader_thread.set()
+        if not self.read_recorded_data and self.filename_meta_data is not None:
+            self.dump_meta_info['end_time'] = datetime.datetime.now().strftime(DataHub.ts_format_string)
+            with open(self.filename_meta_data, "w") as f:
+                json.dump(self.dump_meta_info, f)
+        self.reader_thread.join()
+        self.reader_thread = None
+
     def stop(self):
         if self.reader_thread is None:
             return

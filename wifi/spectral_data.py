@@ -36,6 +36,10 @@ class SpectralData(object):
     def change_channel(self, channel):
         self.scanner.set_channel(channel)
 
+    def pause(self):
+        self.scanner.pause()
+        self.hub.pause()
+
     def stop(self):
         self.scanner.stop()
         self.hub.stop()
@@ -55,3 +59,6 @@ class SpectralData(object):
 
     def get_queue_data(self):
         return self.output_queue.get(block=True)
+
+    def queue_is_empty(self):
+        return self.output_queue.empty()

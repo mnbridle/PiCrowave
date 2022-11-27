@@ -196,15 +196,6 @@ class AthSpectralScanner(object):
             raise Exception("unknown value for HT mode: '%s'. valid: HT20" % count)
         self.set_channel(self.current_chan)  # set new HT mode
 
-    # def _set_ht40_mode_for_freq(self, freq):
-    #     if not str(freq) in self.ht40allow_map.keys():
-    #         self.current_ht_mode = "HT20"
-    #         return
-    #     if "+" in self.ht40allow_map[str(freq)]:
-    #         self.current_ht_mode = "HT40+"
-    #     else:
-    #         self.current_ht_mode = "HT40-"
-
     # Source of min/max values for parameters: ath9k/spectral-common.c
     def set_spectral_count(self, count):
         if count > 255 or count < 0:
@@ -260,6 +251,11 @@ class AthSpectralScanner(object):
             self._start_scan_process()
         else:
             self._set_spectral_cfg('spectral_scan_ctl', "trigger")
+
+    def pause(self):
+        self.running = False
+        self.set_mode("disable")
+        self._stop_scan_process()
 
     def stop(self):
         self.running = False

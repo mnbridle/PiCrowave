@@ -22,15 +22,38 @@ def spectral_demo(fb, spectral_data, channel):
     print(f"Took {time.time() - timetrack} to generate the image")
 
     while(1):
-        full_frame = None
+        all_rf_data = []
+
         for channel in [1, 5, 9, 13]:
             spectral_data.change_channel(channel=channel)
-            _, rf_data = spectral_data.get_queue_data()
+            time.sleep(0.25)
 
-            if full_frame is None:
-                full_frame = rf_data
+        spectral_data.pause()
+
+        timetrack = time.time()
+        # Process the data
+        while spectral_data.queue_is_empty():
+            _, rf_data = spectral_data.get_queue_data()
+            all_rf_data.append(rf_data)
+
+        # Get data frame
+        data_frame = np.concatenate((all_rf_data), axis=0)
+        sorted_data_frame = data_frame[data_frame[:, 0].argsort()]
+
+        freq_dict = {}
+        for data in sorted_data_frame:
+            if data[0] not in freq_dict:
+                freq_dict[data[0]] = [data[1]]
             else:
-                full_frame = np.concatenate((full_frame, rf_data), axis=0)
+                freq_dict[data[0]].append(data[1])
+
+        # Get maximum RSSI for sample period
+        max_power_per_freq = []
+        for freq in freq_dict:
+            max_power_per_freq.append((freq, max(freq_dict[freq])))
+
+        full_frame = np.array(max_power_per_freq)
+        print(f"Took {time.time() - timetrack} to process the RF data")
 
         timetrack = time.time()
         graph_image_obj = Image.new("RGBA", fb.size, (0, 0, 0, 0))
@@ -43,7 +66,7 @@ def spectral_demo(fb, spectral_data, channel):
 
 
 def main():
-    channel = 7
+    channel = 1
     fb = Framebuffer(constants.framebuffer_number)
 
     wifi_rf = spectral_data.SpectralData()
