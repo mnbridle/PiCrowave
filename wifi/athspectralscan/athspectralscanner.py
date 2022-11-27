@@ -259,6 +259,7 @@ class AthSpectralScanner(object):
     def pause(self):
         self.running = False
         self.set_mode("pause")
+        self._set_spectral_cfg('spectral_scan_ctl', "trigger")
         self._stop_scan_process()
 
     def stop(self):
