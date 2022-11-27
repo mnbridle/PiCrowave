@@ -24,11 +24,9 @@ def spectral_demo(fb, spectral_data, channel):
     while(1):
         all_rf_data = []
         spectral_data.start(channel=1)
-        time.sleep(0.25)
 
         for channel in [5, 9, 13]:
             spectral_data.change_channel(channel=channel)
-            time.sleep(0.25)
 
         while not spectral_data.queue_is_empty():
             _, rf_data = spectral_data.get_queue_data()

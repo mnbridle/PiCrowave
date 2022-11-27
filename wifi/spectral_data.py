@@ -15,7 +15,7 @@ class SpectralData(object):
 
         # Setup decoder
         self.decoder = AthSpectralScanDecoder()
-        self.decoder.set_number_of_processes(1)  # so we do not need to sort the results by TSF
+        self.decoder.set_number_of_processes(8)  # so we do not need to sort the results by TSF
         self.decoder.set_output_queue(self.output_queue)
         self.decoder.disable_pwr_decoding(False)
 
@@ -28,7 +28,7 @@ class SpectralData(object):
     def start(self, channel=1):
         self.scanner.set_spectral_short_repeat(1)
         self.scanner.set_mode("manual")
-        self.scanner.set_spectral_count(1)
+        self.scanner.set_spectral_count(64)
         self.scanner.set_channel(channel)
 
         self.hub.start()
@@ -58,5 +58,4 @@ class SpectralData(object):
         return self.output_queue.get(block=True)
 
     def queue_is_empty(self):
-        print(f"Size of queue: {self.output_queue.qsize()}")
         return self.output_queue.empty()
