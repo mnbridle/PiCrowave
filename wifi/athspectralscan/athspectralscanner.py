@@ -104,7 +104,7 @@ class AthSpectralScanner(object):
         self.set_mode("disable")
 
     def set_mode(self, mode, skip_interface_config=False):
-        if mode not in ["chanscan", "background", "manual", "disable"]:
+        if mode not in ["chanscan", "background", "manual", "disable", "pause"]:
             raise Exception("Unknown mode requested: '%s'" % mode)
 
         if mode is "chanscan" and self.mode is not "chanscan":
@@ -149,6 +149,10 @@ class AthSpectralScanner(object):
             # need to trigger() here? ? -> not needed. ath9k_cmn_spectral_scan_config() calls
             # ath9k_hw_ops(ah)->spectral_scan_config() which unset the AR_PHY_SPECTRAL_SCAN_ENABLE flag if needed
             self.need_tear_down = True
+            return
+        if mode is "pause" and self.mode is not "pause":
+            self.mode = mode
+            self._set_spectral_cfg('spectral_scan_ctl', "disable")
             return
 
     def trigger(self):
@@ -254,7 +258,7 @@ class AthSpectralScanner(object):
 
     def pause(self):
         self.running = False
-        self.set_mode("disable")
+        self.set_mode("pause")
         self._stop_scan_process()
 
     def stop(self):
