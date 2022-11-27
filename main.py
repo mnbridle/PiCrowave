@@ -10,14 +10,14 @@ from wifi import test_data, spectral_data
 import ui.spectral_plot
 
 
-def spectral_demo(fb, spectral_data, channel):
+def spectral_demo(fb, spectral_data):
     # This will need to be fast
     # Get the data, average the samples, pump out a plot
 
     timetrack = time.time()
 
     background_image_obj = Image.new("RGBA", fb.size, (0, 0, 0, 0))
-    background_image_obj = ui.spectral_plot.initialise_image(background_image_obj, channel=channel)
+    background_image_obj = ui.spectral_plot.initialise_image(background_image_obj, channel=1)
 
     print(f"Took {time.time() - timetrack} to generate the image")
     spectral_data.start()
@@ -25,8 +25,6 @@ def spectral_demo(fb, spectral_data, channel):
     while(1):
         all_rf_data = []
         time.sleep(0.5)
-        # for channel in [5, 9, 13]:
-        #     spectral_data.change_channel(channel=channel)
 
         while not spectral_data.queue_is_empty():
             _, rf_data = spectral_data.get_queue_data()
@@ -63,14 +61,13 @@ def spectral_demo(fb, spectral_data, channel):
 
 
 def main():
-    channel = 1
     fb = Framebuffer(constants.framebuffer_number)
 
     wifi_rf = spectral_data.SpectralData()
-    wifi_rf.start(channel=channel)
+    wifi_rf.start()
 
     try:
-        spectral_demo(fb, wifi_rf, channel)
+        spectral_demo(fb, wifi_rf)
     except KeyboardInterrupt as e:
         wifi_rf.stop()
 

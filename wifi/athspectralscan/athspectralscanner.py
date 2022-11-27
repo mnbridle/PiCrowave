@@ -337,6 +337,7 @@ class AthSpectralScanner(object):
             self.chanscan_process = None
 
     def _scan(self):
+        print("Starting the scan process")
         while not self.chanscan_process_exit.is_set():
             cmd = 'iw dev %s scan' % self.interface
             os.system('%s >/dev/null 2>/dev/null' % cmd)  # call blocks
