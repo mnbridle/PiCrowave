@@ -27,8 +27,8 @@ class SpectralData(object):
 
     def start(self):
         self.scanner.set_spectral_short_repeat(1)
-        self.scanner.set_mode("manual", skip_interface_config=True)
-        self.scanner.set_spectral_count(64)
+        self.scanner.set_mode("manual", skip_interface_config=False)
+        self.scanner.set_spectral_count(127)
 
         self.hub.start()
         self.scanner.start()

@@ -21,12 +21,15 @@ def spectral_demo(fb, spectral_data):
 
     spectral_data.start()
     time.sleep(0.5)
-    
+
     while(1):
         all_rf_data = []
 
         for channel in [1, 5, 9, 13]:
             spectral_data.change_channel(channel=channel)
+
+        # Allow time for queues to be flushed
+        time.sleep(0.25)
 
         while not spectral_data.queue_is_empty():
             _, rf_data = spectral_data.get_queue_data()
