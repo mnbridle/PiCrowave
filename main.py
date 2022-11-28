@@ -15,17 +15,18 @@ def spectral_demo(fb, spectral_data):
     # Get the data, average the samples, pump out a plot
 
     timetrack = time.time()
-
     background_image_obj = Image.new("RGBA", fb.size, (0, 0, 0, 0))
     background_image_obj = ui.spectral_plot.initialise_image(background_image_obj, channel=1)
-
     print(f"Took {time.time() - timetrack} to generate the image")
 
+    spectral_data.start()
+    time.sleep(0.5)
+    
     while(1):
         all_rf_data = []
 
-        spectral_data.start()
-        time.sleep(0.5)
+        for channel in [1, 5, 9, 13]:
+            spectral_data.change_channel(channel=channel)
 
         while not spectral_data.queue_is_empty():
             _, rf_data = spectral_data.get_queue_data()
@@ -63,7 +64,6 @@ def spectral_demo(fb, spectral_data):
 
 def main():
     fb = Framebuffer(constants.framebuffer_number)
-
     wifi_rf = spectral_data.SpectralData()
 
     try:
