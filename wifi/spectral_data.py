@@ -58,3 +58,7 @@ class SpectralData(object):
 
     def queue_is_empty(self):
         return self.output_queue.empty()
+
+    def decoder_is_finished(self):
+        return self.decoder.is_finished()
+

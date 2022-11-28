@@ -31,7 +31,7 @@ def spectral_demo(fb, spectral_data):
         # Allow time for queues to be flushed
         time.sleep(0.25)
 
-        while not spectral_data.queue_is_empty():
+        while not spectral_data.decoder_is_finished():
             _, rf_data = spectral_data.get_queue_data()
             all_rf_data.append(rf_data)
 

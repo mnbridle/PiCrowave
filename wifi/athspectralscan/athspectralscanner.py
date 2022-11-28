@@ -193,7 +193,7 @@ class AthSpectralScanner(object):
         # elif "HT40" in ht_mode:
         #     self._set_ht40_mode_for_freq(self.current_freq)
         else:
-            raise Exception("unknown value for HT mode: '%s'. valid: HT20" % count)
+            raise Exception("unknown value for HT mode: '%s'. valid: HT20" % ht_mode)
         self.set_channel(self.current_chan)  # set new HT mode
 
     # Source of min/max values for parameters: ath9k/spectral-common.c
