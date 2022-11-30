@@ -27,6 +27,7 @@ def spectral_demo(fb, spectral_data):
 
         for channel in [1, 5, 9, 13]:
             spectral_data.change_channel(channel=channel)
+            time.sleep(0.05)
 
         # Allow time for queues to be flushed
         timetrack = time.time()
