@@ -10,7 +10,7 @@ def splash_screen(image):
     shape = [(0, 0), (320, 240)]
     draw.rectangle(shape, fill="#000000", outline="black")
 
-    draw.text((120, 40), f"AR9271-based", font=hdg_fnt, fill="yellow")
+    draw.text((105, 40), f"AR9271-based", font=hdg_fnt, fill="yellow")
     draw.text((80, 56), f"Spectrum Analyser", font=hdg_fnt, fill="yellow")
     draw.text((60, 80), f"Matthew Bridle, ZL2MNB", font=hdg_fnt, fill="red")
 
