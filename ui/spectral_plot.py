@@ -1,9 +1,7 @@
 from PIL import ImageDraw, Image, ImageFont
 
-import copy
 
-
-def initialise_image(image, channel, location=(30, 20), size=(280, 200), freq_scale=(2400, 2483), pwr_scale=(-150, -30), gridlines=(10, 10)):
+def initialise_image(image, channel, location=(30, 20), size=(280, 200), freq_scale=(2400, 2483), pwr_scale=(-150, 0), gridlines=(10, 10)):
     # Initialise image in framebuffer
     draw = ImageDraw.Draw(image)
 
@@ -51,11 +49,11 @@ def initialise_image(image, channel, location=(30, 20), size=(280, 200), freq_sc
         dbm -= gridlines[1]
         y += int(grid_intervals[1])
 
-    draw.text((0, 0), f"Spectrum analysis - channel {channel}", font=hdg_fnt, fill="yellow")
+    draw.text((0, 0), f"Spectrum analysis - 2.4GHz band", font=hdg_fnt, fill="yellow")
 
     return image
 
-def show_band(image, rf_data, location=(30, 20), size=(280, 200), freq_scale=(2400, 2483), pwr_scale=(-150, -30), gridlines=(10, 10)):
+def show_band(image, rf_data, location=(30, 20), size=(280, 200), freq_scale=(2400, 2483), pwr_scale=(-150, 0), gridlines=(10, 10)):
     draw = ImageDraw.Draw(image)
 
     # Draw gridlines
@@ -73,7 +71,6 @@ def show_band(image, rf_data, location=(30, 20), size=(280, 200), freq_scale=(24
 
     # Reorder RF data
     rf_data = rf_data[rf_data[:, 0].argsort()]
-    print(rf_data)
 
     old_data = None
     for data_point in rf_data:
