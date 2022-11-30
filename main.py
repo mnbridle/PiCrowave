@@ -29,7 +29,7 @@ def spectral_demo(fb, spectral_data):
             spectral_data.change_channel(channel=channel)
             # Trigger the spectral scanner multiple times
             scan_count = 0
-            while scan_count < 3:
+            while scan_count < 6:
                 spectral_data.trigger_scan()
                 scan_count += 1
 
