@@ -102,13 +102,20 @@ class AthSpectralScanDecoder(object):
         self.input_queue.put(data)
 
     def _decode_data_process(self):
+        retry_count = 0
         while not self.shut_down.is_set():
             try:
                 data = self.input_queue.get(timeout=self.input_queue_timeout)
                 self.work_done.clear()
             except Empty:
-                self.work_done.set()
-                continue
+                if retry_count > 10:
+                    self.work_done.set()
+                    continue
+                else:
+                    retry_count += 1
+                    time.sleep(0.01)
+                    continue
+
             # process data
             for decoded_sample in AthSpectralScanDecoder._decode(data, no_pwr=self.disable_pwr_decode):
                 (timestamp, (_, _, _, _, pwr)) = decoded_sample
