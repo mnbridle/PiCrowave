@@ -86,6 +86,7 @@ class AthSpectralScanDecoder(object):
         self.number_of_processes = number
 
     def is_finished(self):
+        print(f"shut_down.is_set(): {self.shut_down.is_set()} || self.work_done.is_set(): {self.work_done.is_set()}")
         return self.shut_down.is_set() or self.work_done.is_set()
 
     def stop(self):
