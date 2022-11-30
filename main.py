@@ -27,6 +27,12 @@ def spectral_demo(fb, spectral_data):
 
         for channel in [1, 5, 9, 13]:
             spectral_data.change_channel(channel=channel)
+            # Trigger the spectral scanner multiple times
+            scan_count = 0
+            while scan_count < 10:
+                spectral_data.trigger_scan()
+                scan_count += 1
+
             time.sleep(0.05)
 
         # Allow time for queues to be flushed

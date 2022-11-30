@@ -36,6 +36,9 @@ class SpectralData(object):
     def change_channel(self, channel):
         self.scanner.set_channel(channel)
 
+    def trigger_scan(self):
+        self.scanner.trigger()
+
     def stop(self):
         self.scanner.stop()
         self.hub.stop()
