@@ -1,5 +1,17 @@
 from PIL import ImageDraw, Image, ImageFont
 
+def splash_screen(image):
+    draw = ImageDraw.Draw(image)
+    # Initialise fonts
+    small_fnt = ImageFont.truetype("Pillow/Tests/fonts/FreeMono.ttf", 10)
+    hdg_fnt = ImageFont.truetype("Pillow/Tests/fonts/FreeMono.ttf", 16)
+
+    draw.text((120, 40), f"AR9271-based", font=hdg_fnt, fill="yellow")
+    draw.text((120, 56), f"Spectrum Analyser", font=hdg_fnt, fill="yellow")
+    draw.text((120, 80), f"Matthew Bridle, ZL2MNB", font=hdg_fnt, fill="red")
+
+    return image
+
 
 def initialise_image(image, channel, location=(30, 20), size=(280, 200), freq_scale=(2400, 2483), pwr_scale=(-150, 0), gridlines=(10, 10)):
     # Initialise image in framebuffer

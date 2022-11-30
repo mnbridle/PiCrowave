@@ -17,7 +17,15 @@ def spectral_demo(fb, spectral_data):
     timetrack = time.time()
     background_image_obj = Image.new("RGBA", fb.size, (0, 0, 0, 0))
     background_image_obj = ui.spectral_plot.initialise_image(background_image_obj, channel=1)
+    
+    splash_screen_obj = Image.new("RGBA", fb.size, (0, 0, 0, 0))
+    splash_screen_obj = ui.spectral_plot.splash_screen(splash_screen_obj)
+
     print(f"Took {time.time() - timetrack} to generate the image")
+
+    # Write to framebuffer
+    fb.show(splash_screen_obj)
+    time.sleep(10)
 
     spectral_data.start()
     time.sleep(0.5)
